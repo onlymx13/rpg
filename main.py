@@ -1,4 +1,3 @@
-import math
 import random
 
 def die():
@@ -9,6 +8,7 @@ health = 10
 enemyHealth = 10
 defend = 0
 forcefield = 0
+confused = 0
 print("Time to fight a monster.")
 while True:
     if enemyHealth <= 0:
@@ -29,10 +29,13 @@ while True:
         defend = random.randint(0, 3)
         print("You defend.\n" + ["Too bad! You fumble and drop your shield.", "It works, a little.", "It works pretty well.", "Your defensive stance is legendary."][defend])
     elif choice == "R" or choice == "r":
-        print("You ran.")
-        exit()
+        if random.random() > 0.5:
+            print("You ran.")
+            exit()
+        else:
+            print("You did not escape. Too bad!")
     elif choice == "P" or choice =="p":
-        potion = math.floor(4 * random.random())
+        potion = random.randint(0, 4)
         print("You used a potion.\nYou pull a random one out of your Potion Bag™.")
         if potion == 0:
             print("Darn. This green potion is actually a poison. You must've misread the label.\n\nToo bad for you.")
@@ -47,11 +50,14 @@ while True:
             print("You pull out a yellow potion. It creates a large explosion. It does 1 damage to you, but it seems to hurt the monster too.")
             enemyHealth -= 2
             health -= 1
+        elif potion == 4:
+            print("You pull out an orange potion and throw it at the monster. It creates an explosion of smoke.\nThe monster becomes confused.")
+            confused = 1
         else:
             print("Potion " + int(potion) + "is not a real potion.")
             die()
     elif choice == "S" or choice == "s":
-        spell = math.floor(4 * random.random()) # random 0-3 inclusive
+        spell = random.randint(0, 3)
         consonants = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "x", "y", "z"]
         vowels = ["a", "e", "i", "o", "u"]
         print('You cast a spell.\n"' + random.choice(consonants).upper() + random.choice(vowels) + random.choice(consonants) + random.choice(vowels) + random.choice(consonants) + '!" you say.')
@@ -70,8 +76,18 @@ while True:
     else:
         print("That's not an option.")
         die()
-    print("The monster looks at you. Fear deals you " + str(4 - defend - 2 * forcefield) + " damage.")
-    health += defend + 2 * forcefield - 4
+    if confused:
+        print("The monster is confused. It hurt itself in its confusion!\n\nSadly, it's still scary. It looks at you. Fear deals you " + str(max(0, 3 - defend - 2 * forcefield)) + " damage.")
+        enemyHealth -= 1
+        health -= max(0, 3 - defend - 2 * forcefield)
+        if random.random() > 0.5:
+            print("The monster is still confused.")
+        else:
+            print("The monster shakes off its confusion.")
+            confused = 0
+    else:
+        print("The monster looks at you. Fear deals you " + str(max(0, 4 - defend - 2 * forcefield)) + " damage.")
+        health -= max(0, 4 - defend - 2 * forcefield)
     if forcefield:
         print("Your forcefield fizzles out.")
         forcefield = 0

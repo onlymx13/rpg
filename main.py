@@ -32,7 +32,7 @@ while True:
     if choice == "A" or choice == "a":
         print("You attacked the monster.")
         damage = random.randint(0, 1)
-        print(["The monster's spikes hurt you instead. You took 1 damage.", "Your attack glances harmlessly off of the monster's rocky skin."][damage])
+        print(["Your attack glances harmlessly off of the monster's rocky skin.", "The monster's spikes hurt you instead. You took 1 damage."][damage])
         health -= damage
     elif choice == "D" or choice == "d":
         defend = random.randint(0, 3)
